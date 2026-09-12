@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📚 AYYO Emoji Code Library — Python Reference</title>
+  <meta name="description" content="A beginner-friendly Python reference where Python concepts are taught using emojis as visual mnemonics." />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <div class="app-container" style="max-width: 800px;">
+    
+    <!-- Top Header -->
+    <header class="app-header" id="app-header">
+      <div class="header-meta">
+        <span class="section-label">AYYO V2.0 • VISUAL PYTHON REFERENCE</span>
+        <h1 class="header-greeting">📚 Emoji Library</h1>
+      </div>
+      
+      <div class="header-actions">
+        <a href="/" class="btn-primary-cta" style="height: 40px; padding: 0 16px; font-size: 13px; text-decoration: none; border-radius: 20px;">
+          ← Back to editor
+        </a>
+      </div>
+    </header>
+
+    <!-- Search & Category Filters -->
+    <section class="library-filter-wrapper">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="library-search" class="search-input" placeholder="Search concepts (e.g. loop, list, print)..." />
+      </div>
+
+      <div class="category-pills-bar" id="category-pills-bar">
+        <button class="mode-tab-btn active" data-cat="all">✨ All</button>
+        <button class="mode-tab-btn" data-cat="Basics">🔢 Basics</button>
+        <button class="mode-tab-btn" data-cat="Data Structures">📋 Data</button>
+        <button class="mode-tab-btn" data-cat="Operators">➕ Operators</button>
+        <button class="mode-tab-btn" data-cat="Loops & Conditions">🔁 Loops</button>
+        <button class="mode-tab-btn" data-cat="Functions">🎁 Functions</button>
+        <button class="mode-tab-btn" data-cat="Errors">🛡️ Errors</button>
+        <button class="mode-tab-btn" data-cat="Files">📂 Files</button>
+        <button class="mode-tab-btn" data-cat="Files & Shortcuts">📦 Shortcuts</button>
+      </div>
+    </section>
+
+    <!-- Concepts Grid -->
+    <main class="library-grid" id="library-grid">
+      <!-- Dynamically populated via JS -->
+    </main>
+
+  </div>
+
+  <!-- Toast Message -->
+  <div class="toast-msg" id="toast">Copied! ✅</div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let allConcepts = [];
+    let activeCategory = "all";
+
+    function showToast(msg) {
+      const toast = $("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    async function loadConcepts() {
+      try {
+        const res = await fetch("/api/library");
+        const data = await res.json();
+        allConcepts = data.concepts || [];
+        renderConcepts();
+      } catch (err) {
+        console.error("Failed to load library concepts:", err);
+      }
+    }
+
+    function renderConcepts() {
+      const query = $("library-search").value.toLowerCase().trim();
+      const grid = $("library-grid");
+      grid.innerHTML = "";
+
+      const filtered = allConcepts.filter(c => {
+        const catMatch = (activeCategory === "all") || (c.category.toLowerCase().includes(activeCategory.toLowerCase()));
+        const queryMatch = !query || (
+          c.name.toLowerCase().includes(query) ||
+          c.category.toLowerCase().includes(query) ||
+          c.description_ml.toLowerCase().includes(query) ||
+          c.code.toLowerCase().includes(query)
+        );
+        return catMatch && queryMatch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--sage); font-weight: 700;">
+            <div style="font-size: 40px; margin-bottom: 8px;">🤔</div>
+            <div>No concepts found matching your search.</div>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement("article");
+        card.className = "concept-card fade-in-reveal";
+
+        card.innerHTML = `
+          <div class="concept-emoji-top">${escapeHtml(c.emoji)}</div>
+          <div class="concept-category-tag">${escapeHtml(c.category)}</div>
+          <h3 class="concept-title">${escapeHtml(c.name)}</h3>
+          <p class="concept-desc">${escapeHtml(c.description_ml)}</p>
+          
+          <div class="error-code-block" style="border-left-color: var(--info-blue); margin: 6px 0;">${escapeHtml(c.code)}</div>
+          
+          <div class="concept-card-actions">
+            <button class="btn-card-copy" data-code="${escapeAttribute(c.code)}">
+              📋 Copy
+            </button>
+            <button class="btn-card-try" data-code="${escapeAttribute(c.code)}">
+              🚀 Try it
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // Attach Copy & Try listeners
+      grid.querySelectorAll(".btn-card-copy").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const code = btn.dataset.code;
+          navigator.clipboard.writeText(code).then(() => {
+            showToast("Copied! ✅");
+          }).catch(() => {
+            showToast("Copy failed");
+          });
+        });
+      });
+
+      grid.querySelectorAll(".btn-card-try").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const code = btn.dataset.code;
+          sessionStorage.setItem("ayyo_try_code", code);
+          window.location.href = "/";
+        });
+      });
+    }
+
+    function escapeHtml(s) {
+      if (!s) return "";
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    function escapeAttribute(s) {
+      if (!s) return "";
+      return String(s).replace(/"/g, "&quot;");
+    }
+
+    // Category Pills Event Listeners
+    document.querySelectorAll(".category-pills-bar .mode-tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".category-pills-bar .mode-tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeCategory = btn.dataset.cat;
+        renderConcepts();
+      });
+    });
+
+    // Search Input Listener
+    $("library-search").addEventListener("input", renderConcepts);
+
+    // Initial Load
+    window.addEventListener("DOMContentLoaded", loadConcepts);
+  </script>
+</body>
+</html>

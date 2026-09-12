@@ -1,0 +1,1433 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AYYO — Malayalam Python Companion & Playground</title>
+  <meta name="description"
+    content="AYYO is a multi-feature Malayalam Python companion that can diagnose, explain, investigate, clean, evaluate your code, and generate unit tests." />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- Top Header -->
+    <header class="app-header" id="app-header">
+      <div class="header-meta">
+        <span class="section-label">AYYO V2.0 • PYTHON PLAYGROUND</span>
+        <h1 class="header-greeting">Namaskaram</h1>
+      </div>
+
+      <div class="header-actions">
+        <!-- Audio Waveform Playing Indicator -->
+        <div class="audio-waveform hidden" id="audio-waveform" title="AYYO Speaking...">
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+          <div class="waveform-bar"></div>
+        </div>
+
+        <!--  Emoji Library Header Link -->
+        <a href="/library" class="header-lib-btn" title="Open Emoji Code Library">
+          📚
+        </a>
+
+        <!-- Voice Toggle Button (🔊 / 🔇) -->
+        <button class="voice-toggle-btn" id="voice-toggle-btn" title="Toggle AYYO Voice Mode (🔊/🔇)">
+          <span id="voice-toggle-icon">🔇</span>
+        </button>
+
+        <!-- Voice Settings Gear Button -->
+        <button class="voice-settings-btn" id="voice-settings-btn" title="Voice Settings">
+          ⚙️
+        </button>
+
+        <!-- Avatar Pill -->
+        <div class="header-avatar-container" title="AYYO Python Assistant">
+          <div class="avatar-pill">🐍</div>
+          <div class="notification-badge" id="notif-badge"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mode Selector Bar (Show All or Filter by Feature) -->
+    <section class="mode-selector-wrapper">
+      <div class="section-label">FEATURE SECTIONS</div>
+      <div class="mode-tab-bar" id="mode-tab-bar">
+        <button class="mode-tab-btn active" data-mode="all">All Features</button>
+        <button class="mode-tab-btn" data-mode="diagnose">Diagnose</button>
+        <button class="mode-tab-btn" data-mode="explain">Explain</button>
+        <button class="mode-tab-btn" data-mode="detective">Detective</button>
+        <button class="mode-tab-btn" data-mode="cleaner">Cleaner</button>
+        <button class="mode-tab-btn" data-mode="personality">Personality</button>
+        <button class="mode-tab-btn" data-mode="test-lab">Test Lab</button>
+      </div>
+    </section>
+
+    <!-- 🎨 EMOJI CODER PALETTE & TRANSLATION PANEL -->
+    <section class="emoji-coder-wrapper" id="emoji-coder-wrapper">
+      <div class="emoji-coder-header">
+        <span class="section-label">EMOJI CODER PALETTE</span>
+        <button class="emoji-view-toggle-btn" id="emoji-view-toggle-btn" title="Toggle Emoji View Translation">
+          🎨 Emoji View
+        </button>
+      </div>
+
+      <!-- Horizontal Emoji Palette Strip -->
+      <div class="emoji-palette-strip" id="emoji-palette-strip">
+        <!-- Palette buttons populated by JS -->
+      </div>
+
+      <!-- Quick Emoji Programs -->
+      <div class="quick-programs-row">
+        <span class="section-label" style="font-size: 9px; flex-shrink: 0;">QUICK PROGRAMS:</span>
+        <div id="quick-programs-list" class="quick-programs-list">
+          <!-- Quick program chips populated by JS -->
+        </div>
+      </div>
+
+      <!-- Collapsible Emoji View Panel -->
+      <div class="emoji-view-panel hidden" id="emoji-view-panel">
+        <div class="section-label" style="margin-bottom: 6px;">EMOJI VIEW TRANSLATION</div>
+        <div id="emoji-view-lines-container" class="emoji-view-lines"></div>
+      </div>
+    </section>
+
+    <!-- Hero Feature Card (Code Editor) -->
+    <section class="hero-card" id="hero-card">
+      <div class="hero-decorative-blob"></div>
+
+      <div class="hero-header-row">
+        <div class="hero-icon-holder">📝</div>
+        <div class="hero-title-group">
+          <span class="section-label">EDITOR</span>
+          <h2 class="subhead">Write your code</h2>
+        </div>
+      </div>
+
+      <!-- Nested Charcoal Editor Surface -->
+      <div class="editor-surface" id="editor-surface">
+        <div class="editor-header-bar">
+          <div class="editor-dots">
+            <div class="editor-dot red"></div>
+            <div class="editor-dot yellow"></div>
+            <div class="editor-dot green"></div>
+          </div>
+          <span class="editor-lang-tag">PYTHON 3.11</span>
+        </div>
+
+        <div class="editor-wrapper">
+          <div class="line-numbers" id="line-numbers">1</div>
+          <textarea id="code" class="code-textarea" spellcheck="false"
+            placeholder="Type Python code here..."></textarea>
+        </div>
+      </div>
+
+      <!-- Bento Metrics Grid (2 columns) -->
+      <div class="bento-metrics-grid">
+        <!-- Lines Metric -->
+        <div class="bento-metric-card">
+          <div class="metric-icon-circle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round">
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="4" y1="12" x2="14" y2="12" />
+              <line x1="4" y1="18" x2="18" y2="18" />
+            </svg>
+          </div>
+          <div class="metric-info">
+            <span class="metric-title">LINES</span>
+            <span class="metric-value" id="line-count-display">1</span>
+          </div>
+        </div>
+
+        <!-- Timeout Metric -->
+        <div class="bento-metric-card">
+          <div class="metric-icon-circle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div class="metric-info">
+            <span class="metric-title">TIMEOUT</span>
+            <div style="display: flex; align-items: center; gap: 2px;">
+              <input id="timeout" class="metric-input" type="number" value="5" min="1" max="10" />
+              <span class="metric-value" style="font-size: 12px; color: var(--sage);">SEC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Red Primary CTA -->
+      <button id="run-btn" class="btn-primary-cta">
+        <svg id="run-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        <span id="run-btn-text">Run code</span>
+      </button>
+    </section>
+
+    <!-- Main Stacked Feature Feed Cards -->
+    <main class="feed-wrapper" id="feed-wrapper">
+
+      <!-- FEATURE SECTION 1: 🔴 DIAGNOSE & LIVE CHECK -->
+      <div id="section-diagnose" class="feature-card-wrapper">
+        <div class="feed-section">
+          <div class="live-check-header">
+            <span class="section-label"> 1. LIVE CHECK & DIAGNOSTICS</span>
+            <div id="live-check-status">
+              <span class="chip-clean">Looks clean </span>
+            </div>
+          </div>
+
+          <!-- Diagnostic Cards Stack for Live Issues -->
+          <div id="live-issues-stack" style="display: flex; flex-direction: column; gap: 12px;"></div>
+
+          <!-- Standard Output Card -->
+          <div class="output-card" id="output-card" style="margin-top: 10px;">
+            <span class="section-label" style="display: block; margin-bottom: 8px;">STANDARD OUTPUT</span>
+            <div id="output-placeholder" class="output-empty">Click "Run code" to view stdout output...</div>
+            <pre id="stdout" class="output-pre hidden"></pre>
+          </div>
+
+          <!-- Execution Error Diagnostic Report Section -->
+          <div id="error-section" class="hidden" style="margin-top: 10px;">
+            <span class="section-label" style="display: block; margin-bottom: 8px;">RUN DIAGNOSTIC REPORT</span>
+            <article class="error-diagnostic-card severity-error" id="error-card">
+              <div class="error-header-row">
+                <div class="error-icon-tile">💀</div>
+                <div class="error-title-group">
+                  <span class="error-line-tag" id="err-line-tag">LINE 1</span>
+                  <h3 class="error-main-title" id="err-title">Syntax Error</h3>
+                </div>
+              </div>
+              <div class="error-code-block" id="err-code-block">print(x / 0)</div>
+              <p class="error-text-desc" id="err-desc">Zero കൊണ്ട് divide ചെയ്യാൻ പറ്റില്ല ബ്രോ.</p>
+              <div class="error-text-tip" id="err-tip">💡 Denominator zero ആണോ എന്ന് നോക്കൂ.</div>
+              <div class="error-hints-area" id="err-hints-area">
+                <span class="error-hints-header">AYYO SUGGESTIONS</span>
+                <div id="err-hints-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE SECTION 2: 🧠 AYYO CODE EXPLAINER -->
+      <div id="section-explain" class="feature-card-wrapper" style="margin-top: 10px;">
+        <span class="section-label"> 2. AYYO CODE EXPLAINER</span>
+        <article class="mode-view-card">
+          <div class="view-card-title-group">
+            <div class="error-icon-tile" style="background: rgba(9, 105, 218, 0.1); color: var(--info-blue);">🧠</div>
+            <div class="error-title-group">
+              <span class="section-label">WHAT DOES THIS CODE DO?</span>
+              <h3 class="view-card-title">Code Explanation</h3>
+            </div>
+          </div>
+
+          <p id="explain-summary" class="error-text-desc">Loading explanation...</p>
+          <div id="explain-details" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <div id="explain-output-box" class="error-code-block hidden"></div>
+          <div id="explain-take" class="error-text-tip"></div>
+        </article>
+      </div>
+
+      <!-- FEATURE SECTION 3: 🕵️ AYYO CODE DETECTIVE -->
+      <div id="section-detective" class="feature-card-wrapper" style="margin-top: 10px;">
+        <span class="section-label"> 3. AYYO CODE DETECTIVE</span>
+        <article class="mode-view-card">
+          <div class="view-card-title-group">
+            <div class="error-icon-tile" style="background: rgba(210, 153, 34, 0.12); color: var(--warning-amber);">🕵️
+            </div>
+            <div class="error-title-group">
+              <span class="section-label">STATIC AUDIT REPORT</span>
+              <h3 class="view-card-title">Code Detective</h3>
+            </div>
+          </div>
+
+          <span class="section-label">EVIDENCE FOUND</span>
+          <div id="detective-counts-grid" class="detective-grid"></div>
+
+          <span class="section-label" style="margin-top: 8px;">SUSPICIOUS ACTIVITY</span>
+          <div id="detective-suspicious-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+
+          <div id="detective-verdict" class="error-text-tip" style="font-weight: 800; font-size: 1rem;"></div>
+        </article>
+      </div>
+
+      <!-- FEATURE SECTION 4: 🧹 AYYO CODE CLEANER -->
+      <div id="section-cleaner" class="feature-card-wrapper" style="margin-top: 10px;">
+        <span class="section-label"> 4. AYYO CODE CLEANER</span>
+        <article class="mode-view-card">
+          <div class="view-card-title-group">
+            <div class="error-icon-tile" style="background: rgba(45, 164, 78, 0.12); color: var(--success-green);">🧹
+            </div>
+            <div class="error-title-group">
+              <span class="section-label">SAFE BEHAVIOR-PRESERVING FORMATTER</span>
+              <h3 class="view-card-title">Cleaned Code</h3>
+            </div>
+          </div>
+
+          <div class="diff-container">
+            <span class="section-label">CLEANED OUTPUT</span>
+            <div id="cleaner-output-box" class="diff-box"></div>
+          </div>
+
+          <span class="section-label">CHANGES APPLIED</span>
+          <div id="cleaner-changes-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+
+          <div id="cleaner-comment" class="error-text-tip"></div>
+        </article>
+      </div>
+
+      <!-- FEATURE SECTION 5: 🧬 CODE PERSONALITY PROFILE -->
+      <div id="section-personality" class="feature-card-wrapper" style="margin-top: 10px;">
+        <span class="section-label"> 5. YOUR CODE PERSONALITY</span>
+        <article class="mode-view-card">
+          <div class="view-card-title-group">
+            <div class="error-icon-tile" style="background: var(--red-10); color: var(--red);">🧬</div>
+            <div class="error-title-group">
+              <span class="section-label">AST METRIC PROFILE</span>
+              <h3 class="view-card-title">Code Personality</h3>
+            </div>
+          </div>
+
+          <div id="personality-bars-container" class="personality-bars"></div>
+
+          <span class="section-label" style="margin-top: 8px;">DEVELOPER TYPE</span>
+          <div id="personality-dev-type" class="badge-dev-type">🧙 THE OVERTHINKING PYTHON WIZARD</div>
+
+          <div id="personality-comment" class="error-text-tip"></div>
+        </article>
+      </div>
+
+      <!-- FEATURE SECTION 6: 🧪 AYYO TEST LAB -->
+      <div id="section-test-lab" class="feature-card-wrapper" style="margin-top: 10px;">
+        <span class="section-label"> 6. AYYO TEST LAB</span>
+        <article class="mode-view-card">
+          <div class="view-card-title-group">
+            <div class="error-icon-tile" style="background: rgba(202, 0, 19, 0.1); color: var(--red);">🧪</div>
+            <div class="error-title-group">
+              <span class="section-label">UNIT TEST GENERATOR</span>
+              <h3 class="view-card-title">AYYO Test Lab</h3>
+            </div>
+          </div>
+
+          <div id="test-lab-functions-header" class="section-label">FUNCTIONS FOUND: 0</div>
+
+          <div id="test-lab-generated-container" style="display: flex; flex-direction: column; gap: 12px;"></div>
+          <div id="test-lab-skipped-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
+
+          <div id="test-lab-summary" class="error-text-tip"></div>
+
+          <!-- Run Tests CTA Button -->
+          <div id="test-lab-run-container" class="hidden" style="margin-top: 6px;">
+            <button id="run-tests-btn" class="btn-primary-cta" style="background: var(--red);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span>▶ Run tests</span>
+            </button>
+          </div>
+
+          <!-- Test Execution Results -->
+          <div id="test-lab-results-container" class="hidden"
+            style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;"></div>
+        </article>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Floating Navigation Bar -->
+  <nav class="floating-nav" id="floating-nav">
+    <div class="nav-group">
+      <button class="nav-icon-btn" id="nav-clear-btn" title="Clear Code">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" id="nav-top-btn" title="Jump to Top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Floating Center Action Button (Run FAB) -->
+    <div class="fab-container">
+      <button class="nav-fab-btn" id="fab-run-btn" title="Run Action (Ctrl+Enter)">
+        <svg id="fab-run-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-icon-btn" id="nav-copy-btn" title="Copy Code">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" id="nav-info-btn" title="AYYO Help & Shortcuts">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Help & Info Modal -->
+  <div class="modal-backdrop" id="info-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">AYYO Python Companion</h3>
+        <button class="modal-close-btn" id="modal-close">✕</button>
+      </div>
+
+      <p style="font-size: 0.95rem; color: rgba(23,30,25,0.8); line-height: 1.6;">
+        <strong>AYYO</strong> is a multi-feature Malayalam Python companion that can diagnose, explain, investigate,
+        clean, judge your code, and generate unit tests!
+      </p>
+
+      <div
+        style="background: var(--off-white); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 11px; font-weight: 800; color: var(--sage); text-transform: uppercase;">Features</span>
+        <div style="font-size: 13px; font-weight: 700;">🔴 Diagnose — Live check & stdout output</div>
+        <div style="font-size: 13px; font-weight: 700;">🧠 Explain — What does this code do?</div>
+        <div style="font-size: 13px; font-weight: 700;">🕵️ Detective — Code audit report</div>
+        <div style="font-size: 13px; font-weight: 700;">🧹 Cleaner — Safe code formatting</div>
+        <div style="font-size: 13px; font-weight: 700;">🧬 Personality — AST developer profile</div>
+        <div style="font-size: 13px; font-weight: 700;">🧪 Test Lab — Runnable unit test generator</div>
+        <div style="font-size: 13px; font-weight: 700;">🗣️ Voice Mode — Offline TTS explanations</div>
+        <div style="font-size: 13px; font-weight: 700;">📚 Emoji Library — Visual Python reference</div>
+        <div style="font-size: 13px; font-weight: 700;">🎨 Emoji Coder — Emoji palette & translation</div>
+      </div>
+
+      <button id="modal-ok-btn" class="btn-primary-cta" style="height: 44px; font-size: 14px; border-radius: 16px;">
+        Got it!
+      </button>
+    </div>
+  </div>
+
+  <!-- Voice Settings Modal -->
+  <div class="modal-backdrop" id="voice-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🗣️ Voice Mode Settings</h3>
+        <button class="modal-close-btn" id="voice-modal-close">✕</button>
+      </div>
+
+      <div class="config-group">
+        <label class="config-label">
+          <span>Speaking Rate (WPM)</span>
+          <span id="voice-rate-val">150</span>
+        </label>
+        <input type="range" id="voice-rate-slider" class="config-slider" min="100" max="250" value="150" />
+      </div>
+
+      <div class="config-group">
+        <label class="config-label">
+          <span>Volume</span>
+          <span id="voice-vol-val">100%</span>
+        </label>
+        <input type="range" id="voice-vol-slider" class="config-slider" min="0" max="100" value="100" />
+      </div>
+
+      <div class="config-group">
+        <label class="config-label">System Voice</label>
+        <select id="voice-select" class="config-select">
+          <option value="">Default System Voice</option>
+        </select>
+      </div>
+
+      <div id="malayalam-voice-notice" class="notice-box">
+        ℹ️ Malayalam voice കിട്ടിയില്ല. English voice ഉപയോഗിക്കുന്നു.<br>
+        <span style="font-size: 11px; opacity: 0.8;">Install: espeak-ng + Malayalam voice pack.</span>
+      </div>
+
+      <button id="voice-modal-save" class="btn-primary-cta" style="height: 44px; font-size: 14px; border-radius: 16px;">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Message -->
+  <div class="toast-msg" id="toast">Copied to clipboard!</div>
+
+  <script>
+    let activeFilterMode = "all";
+    let isVoiceModeOn = false;
+    let voiceConfig = { rate: 150, volume: 100, voice: "" };
+    let currentAudio = null;
+    let currentTestLabTests = [];
+    let isEmojiViewOpen = false;
+
+    const $ = (id) => document.getElementById(id);
+
+    // Primary CTA Button Text Mapping per Mode
+    const ctaLabels = {
+      all: "▶ Run code",
+      diagnose: "▶ Run code",
+      explain: "🧠 Explain code",
+      detective: "🕵️ Investigate",
+      cleaner: "🧹 Clean code",
+      personality: "🧬 Analyze me",
+      "test-lab": "🧪 Generate tests"
+    };
+
+    function updateCtaLabels(mode) {
+      const label = ctaLabels[mode] || "▶ Run code";
+      $("run-btn-text").textContent = label.replace(/^[^a-zA-Z0-9▶]+/, '').trim();
+    }
+
+    // Filter Bar Event Listener
+    document.querySelectorAll(".mode-tab-bar .mode-tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".mode-tab-bar .mode-tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilterMode = btn.dataset.mode;
+
+        updateCtaLabels(activeFilterMode);
+
+        const sections = ["diagnose", "explain", "detective", "cleaner", "personality", "test-lab"];
+        sections.forEach(sec => {
+          const el = $("section-" + sec);
+          if (el) {
+            if (activeFilterMode === "all" || activeFilterMode === sec) {
+              el.classList.remove("hidden");
+            } else {
+              el.classList.add("hidden");
+            }
+          }
+        });
+      });
+    });
+
+    // 🎨 EMOJI CODER PALETTE & TRANSLATION
+    async function loadEmojiPalette() {
+      try {
+        const res = await fetch("/api/emoji-palette");
+        const data = await res.json();
+        renderEmojiPalette(data.palette || []);
+        renderQuickPrograms(data.quick_programs || []);
+      } catch (err) {
+        console.error("Failed to load emoji palette:", err);
+      }
+    }
+
+    function renderEmojiPalette(palette) {
+      const strip = $("emoji-palette-strip");
+      strip.innerHTML = "";
+
+      palette.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "emoji-palette-item";
+
+        div.innerHTML = `
+          <button class="emoji-palette-btn" data-code="${escapeAttribute(item.code)}">
+            ${escapeHtml(item.emoji)}
+          </button>
+          <span class="emoji-item-label">${escapeHtml(item.label)}</span>
+          <div class="emoji-tooltip">${escapeHtml(item.tooltip || item.label)}</div>
+        `;
+
+        const btn = div.querySelector(".emoji-palette-btn");
+        btn.addEventListener("click", () => {
+          insertCodeSnippet(item.code);
+        });
+
+        strip.appendChild(div);
+      });
+    }
+
+    function renderQuickPrograms(programs) {
+      const container = $("quick-programs-list");
+      container.innerHTML = "";
+
+      programs.forEach(p => {
+        const btn = document.createElement("button");
+        btn.className = "quick-program-chip";
+        btn.textContent = `${p.icon} ${p.name}`;
+        btn.title = p.desc;
+        btn.addEventListener("click", () => {
+          $("code").value = p.code;
+          updateEditorStats();
+          runAllFeatures();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function insertCodeSnippet(snippet) {
+      const textarea = $("code");
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+
+      const before = text.substring(0, start);
+      const after = text.substring(end);
+
+      let insertText = snippet;
+      // If adding block at beginning of line or middle
+      if (before.length > 0 && !before.endsWith("\n")) {
+        insertText = "\n" + snippet;
+      }
+
+      textarea.value = before + insertText + after;
+      textarea.focus();
+      const newCursor = before.length + insertText.length;
+      textarea.setSelectionRange(newCursor, newCursor);
+
+      updateEditorStats();
+      runAllFeatures();
+      showToast(`Inserted ${snippet.split("\n")[0].substring(0, 15)}...`);
+    }
+
+    async function updateEmojiView() {
+      if (!isEmojiViewOpen) return;
+
+      const code = $("code").value;
+      try {
+        const res = await fetch("/api/emoji-view", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+        const lines = data.lines || [];
+
+        const container = $("emoji-view-lines-container");
+        container.innerHTML = "";
+
+        lines.forEach(l => {
+          const row = document.createElement("div");
+          row.className = "emoji-view-line";
+          row.innerHTML = `
+            <span class="emoji-view-icon">${escapeHtml(l.emoji)}</span>
+            <span class="emoji-view-text">${escapeHtml(l.code || ' ')}</span>
+          `;
+          container.appendChild(row);
+        });
+
+      } catch (err) {
+        console.error("Emoji view translation error:", err);
+      }
+    }
+
+    $("emoji-view-toggle-btn").addEventListener("click", () => {
+      isEmojiViewOpen = !isEmojiViewOpen;
+      const btn = $("emoji-view-toggle-btn");
+      const panel = $("emoji-view-panel");
+
+      if (isEmojiViewOpen) {
+        btn.classList.add("active");
+        panel.classList.remove("hidden");
+        updateEmojiView();
+      } else {
+        btn.classList.remove("active");
+        panel.classList.add("hidden");
+      }
+    });
+
+    // Run All Features Simultaneously
+    function runAllFeatures() {
+      const code = $("code").value;
+      runLiveCheck();
+      fetchExplain(code);
+      fetchDetective(code);
+      fetchCleaner(code);
+      fetchPersonality(code);
+      fetchTestLab(code);
+      if (isEmojiViewOpen) updateEmojiView();
+    }
+
+    // Debounce helper
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    let analyzeAbortController = null;
+    let currentSeq = 0;
+
+    // 1. Live Check
+    async function runLiveCheck() {
+      const code = $("code").value;
+      if (!code.trim()) {
+        renderLiveCheckStatus("clean");
+        renderLiveCheckIssues([]);
+        return;
+      }
+
+      if (analyzeAbortController) analyzeAbortController.abort();
+      analyzeAbortController = new AbortController();
+
+      const seq = ++currentSeq;
+      renderLiveCheckStatus("checking");
+
+      try {
+        const res = await fetch("/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+          signal: analyzeAbortController.signal,
+        });
+
+        if (seq !== currentSeq) return;
+
+        const data = await res.json();
+        const issues = data.issues || [];
+
+        if (issues.length === 0) {
+          renderLiveCheckStatus("clean");
+        } else {
+          const errorsCount = issues.filter(i => i.severity === "ERROR" || i.severity === "error").length;
+          const warningsCount = issues.filter(i => i.severity === "WARNING" || i.severity === "warning").length;
+          renderLiveCheckStatus("summary", {
+            total: issues.length,
+            errors: errorsCount,
+            warnings: warningsCount
+          });
+        }
+
+        renderLiveCheckIssues(issues);
+
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        renderLiveCheckStatus("unavailable");
+      }
+    }
+
+    const debouncedLiveCheck = debounce(() => {
+      runAllFeatures();
+    }, 400);
+
+    function renderLiveCheckStatus(type, meta = {}) {
+      const container = $("live-check-status");
+      if (type === "checking") {
+        container.innerHTML = `
+          <div class="status-indicator">
+            <div class="pulse-dot"></div>
+            <span class="chip-checking">Checking...</span>
+          </div>
+        `;
+      } else if (type === "clean") {
+        container.innerHTML = `<span class="chip-clean">Looks clean ✅</span>`;
+      } else if (type === "summary") {
+        let parts = [];
+        parts.push(`${meta.total} issue${meta.total > 1 ? 's' : ''}`);
+        if (meta.errors) parts.push(`${meta.errors} error${meta.errors > 1 ? 's' : ''}`);
+        if (meta.warnings) parts.push(`${meta.warnings} warning${meta.warnings > 1 ? 's' : ''}`);
+        container.innerHTML = `<span class="chip-summary">${escapeHtml(parts.join(' · '))}</span>`;
+      } else if (type === "unavailable") {
+        container.innerHTML = `<span class="chip-unavailable">Live check unavailable</span>`;
+      }
+    }
+
+    function renderLiveCheckIssues(issues) {
+      const stack = $("live-issues-stack");
+      stack.innerHTML = "";
+      if (!issues || issues.length === 0) return;
+
+      issues.forEach(issue => {
+        const card = document.createElement("article");
+        const severity = (issue.severity || "ERROR").toLowerCase();
+        card.className = `error-diagnostic-card severity-${severity} diagnostic-card-clickable fade-in-reveal`;
+
+        const icon = severity === "error" ? "💀" : (severity === "warning" ? "⚠️" : "ℹ️");
+        const lineLabel = `LINE ${issue.line || 1}${issue.col ? ' · COL ' + issue.col : ''}`;
+
+        let html = `
+          <div class="error-header-row">
+            <div class="error-icon-tile">${icon}</div>
+            <div class="error-title-group">
+              <span class="error-line-tag">${escapeHtml(lineLabel)}</span>
+              <h3 class="error-main-title">${escapeHtml(issue.title || "Ayyo! Issue Detected")}</h3>
+            </div>
+          </div>
+        `;
+
+        if (issue.code) html += `<div class="error-code-block">${escapeHtml(issue.code)}</div>`;
+        if (issue.desc) html += `<p class="error-text-desc">${escapeHtml(issue.desc)}</p>`;
+        if (issue.tip) html += `<div class="error-text-tip">💡 ${escapeHtml(issue.tip)}</div>`;
+
+        if (issue.hints && issue.hints.length) {
+          html += `
+            <div class="error-hints-area">
+              <span class="error-hints-header">AYYO SUGGESTIONS</span>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+          `;
+          issue.hints.forEach(h => {
+            html += `<pre class="hint-item-pre">${escapeHtml(h)}</pre>`;
+          });
+          html += `</div></div>`;
+        }
+
+        card.innerHTML = html;
+        card.addEventListener("click", () => jumpToEditorLine(issue.line || 1));
+        stack.appendChild(card);
+      });
+    }
+
+    // 2. Fetch Explainer
+    async function fetchExplain(code) {
+      try {
+        const res = await fetch("/explain", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+
+        $("explain-summary").textContent = data.summary;
+        const detailsContainer = $("explain-details");
+        detailsContainer.innerHTML = "";
+
+        const addGroup = (title, items) => {
+          if (!items || !items.length) return;
+          const header = document.createElement("span");
+          header.className = "section-label";
+          header.textContent = title;
+          detailsContainer.appendChild(header);
+          items.forEach(it => {
+            const div = document.createElement("div");
+            div.className = "explain-item";
+            div.textContent = it;
+            detailsContainer.appendChild(div);
+          });
+        };
+
+        addGroup("VARIABLES & ROLES", data.variables_summary);
+        addGroup("FUNCTIONS", data.functions_summary);
+        addGroup("LOOPS", data.loops_summary);
+        addGroup("CONDITIONS", data.conditions_summary);
+
+        if (data.predictable_output) {
+          $("explain-output-box").classList.remove("hidden");
+          $("explain-output-box").textContent = "EXPECTED OUTPUT:\n" + data.predictable_output;
+        } else {
+          $("explain-output-box").classList.add("hidden");
+        }
+
+        $("explain-take").textContent = data.manglish_take;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // 3. Fetch Detective
+    async function fetchDetective(code) {
+      try {
+        const res = await fetch("/detective", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+
+        const grid = $("detective-counts-grid");
+        grid.innerHTML = "";
+        for (const [key, val] of Object.entries(data.counts || {})) {
+          const item = document.createElement("div");
+          item.className = "detective-count-item";
+          item.innerHTML = `<span class="detective-count-val">${val}</span><span class="detective-count-label">${key}</span>`;
+          grid.appendChild(item);
+        }
+
+        const suspList = $("detective-suspicious-list");
+        suspList.innerHTML = "";
+        if (!data.suspicious_activities || !data.suspicious_activities.length) {
+          suspList.innerHTML = `<div class="explain-item">None found! Code looks suspicious-free.</div>`;
+        } else {
+          data.suspicious_activities.forEach(s => {
+            const div = document.createElement("div");
+            const sev = (s.severity || "INFO").toUpperCase();
+            const badge = sev === "ERROR" ? "🔴 ERROR" : (sev === "WARNING" ? "⚠️ WARNING" : "ℹ️ INFO");
+            div.className = "explain-item";
+            div.innerHTML = `<strong>[${badge}]</strong> ${s.line ? 'Line ' + s.line + ': ' : ''}${escapeHtml(s.message)}`;
+            suspList.appendChild(div);
+          });
+        }
+
+        $("detective-verdict").textContent = data.verdict;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // 4. Fetch Cleaner
+    async function fetchCleaner(code) {
+      try {
+        const res = await fetch("/cleaner", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+
+        $("cleaner-output-box").textContent = data.cleaned;
+        const changesList = $("cleaner-changes-list");
+        changesList.innerHTML = "";
+        (data.changes_made || []).forEach(c => {
+          const div = document.createElement("div");
+          div.className = "explain-item";
+          div.textContent = "• " + c;
+          changesList.appendChild(div);
+        });
+
+        $("cleaner-comment").textContent = data.manglish_comment;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // 5. Fetch Personality
+    async function fetchPersonality(code) {
+      try {
+        const res = await fetch("/personality", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+
+        const container = $("personality-bars-container");
+        container.innerHTML = "";
+        for (const [trait, score] of Object.entries(data.scores || {})) {
+          const row = document.createElement("div");
+          row.className = "bar-row";
+          row.innerHTML = `
+            <div class="bar-label-group">
+              <span>${trait}</span>
+              <span>${score}%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: ${score}%;"></div>
+            </div>
+          `;
+          container.appendChild(row);
+        }
+
+        $("personality-dev-type").textContent = data.developer_type;
+        $("personality-comment").textContent = data.manglish_comment;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // 6. Fetch Test Lab
+    async function fetchTestLab(code) {
+      try {
+        const res = await fetch("/test-lab", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+
+        const funcCount = (data.functions || []).length;
+        $("test-lab-functions-header").textContent = `FUNCTIONS FOUND: ${funcCount}`;
+
+        const genContainer = $("test-lab-generated-container");
+        genContainer.innerHTML = "";
+
+        currentTestLabTests = data.tests || [];
+
+        if (data.tests && data.tests.length) {
+          let currentFn = "";
+          data.tests.forEach(t => {
+            if (t.function_name !== currentFn) {
+              currentFn = t.function_name;
+              const header = document.createElement("div");
+              header.className = "test-lab-function-header";
+              header.textContent = `━━━ ${currentFn}() ━━━`;
+              genContainer.appendChild(header);
+            }
+
+            const codeBox = document.createElement("div");
+            codeBox.className = "error-code-block";
+            codeBox.style.borderLeftColor = "var(--red)";
+            codeBox.textContent = t.code;
+            genContainer.appendChild(codeBox);
+          });
+        }
+
+        const skipContainer = $("test-lab-skipped-container");
+        skipContainer.innerHTML = "";
+        if (data.skipped && data.skipped.length) {
+          data.skipped.forEach(s => {
+            const card = document.createElement("div");
+            card.className = "skipped-card";
+            card.textContent = s.reason;
+            skipContainer.appendChild(card);
+          });
+        }
+
+        $("test-lab-summary").textContent = data.summary || "";
+
+        if (currentTestLabTests.length > 0) {
+          $("test-lab-run-container").classList.remove("hidden");
+        } else {
+          $("test-lab-run-container").classList.add("hidden");
+        }
+
+        $("test-lab-results-container").classList.add("hidden");
+        $("test-lab-results-container").innerHTML = "";
+
+        if (isVoiceModeOn && activeFilterMode === "test-lab") {
+          speakAYYO(data.summary);
+        }
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Run Test Lab Generated Tests
+    async function runGeneratedTests() {
+      const code = $("code").value;
+      if (!currentTestLabTests.length) return;
+
+      const btn = $("run-tests-btn");
+      btn.disabled = true;
+      btn.querySelector("span").textContent = "Running tests...";
+
+      try {
+        const res = await fetch("/test-lab/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code,
+            tests: currentTestLabTests
+          })
+        });
+
+        const data = await res.json();
+        const resultsContainer = $("test-lab-results-container");
+        resultsContainer.innerHTML = "";
+        resultsContainer.classList.remove("hidden");
+
+        (data.results || []).forEach(item => {
+          const badge = document.createElement("div");
+          badge.className = `test-result-badge ${item.passed ? 'passed' : 'failed'}`;
+
+          const icon = item.passed ? "✅" : "❌";
+          badge.innerHTML = `
+            <div>${icon}</div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div>${escapeHtml(item.test_name)} — ${item.passed ? 'PASSED' : 'FAILED'}</div>
+              ${!item.passed ? `<div style="font-size: 11px; opacity: 0.9;">${escapeHtml(item.detail)}</div>` : ''}
+            </div>
+          `;
+          resultsContainer.appendChild(badge);
+        });
+
+        if (isVoiceModeOn) {
+          const spoken = `${data.passed_count} of ${data.total_count} tests passed.`;
+          speakAYYO(spoken);
+        }
+
+      } catch (err) {
+        showToast("Error running tests");
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.querySelector("span").textContent = "▶ Run tests";
+      }
+    }
+
+    $("run-tests-btn").addEventListener("click", runGeneratedTests);
+
+    // Jump to Line in Editor
+    function jumpToEditorLine(lineNum) {
+      const textarea = $("code");
+      const lines = textarea.value.split("\n");
+      let charPos = 0;
+      for (let i = 0; i < Math.min(lineNum - 1, lines.length); i++) {
+        charPos += lines[i].length + 1;
+      }
+      textarea.focus();
+      textarea.setSelectionRange(charPos, charPos + (lines[lineNum - 1] ? lines[lineNum - 1].length : 0));
+      $("hero-card").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    // Update Line Numbers & Metrics
+    function updateEditorStats() {
+      const code = $("code").value;
+      const lines = code.split("\n");
+      const lineCount = lines.length;
+
+      $("line-count-display").textContent = lineCount;
+
+      let lineNumHtml = "";
+      for (let i = 1; i <= Math.max(lineCount, 1); i++) {
+        lineNumHtml += i + "<br>";
+      }
+      $("line-numbers").innerHTML = lineNumHtml;
+    }
+
+    function escapeHtml(s) {
+      if (!s) return "";
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    function escapeAttribute(s) {
+      if (!s) return "";
+      return String(s).replace(/"/g, "&quot;");
+    }
+
+    function showToast(msg) {
+      const toast = $("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    // Voice Mode Synthesis & Playback
+    async function speakAYYO(text) {
+      if (!isVoiceModeOn || !text || !text.trim()) return;
+
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+
+      $("audio-waveform").classList.remove("hidden");
+
+      try {
+        const res = await fetch("/speak", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text,
+            rate: voiceConfig.rate,
+            volume: voiceConfig.volume,
+            voice: voiceConfig.voice
+          })
+        });
+
+        if (!res.ok) {
+          throw new Error("Voice synthesis endpoint returned error");
+        }
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        currentAudio = new Audio(url);
+
+        currentAudio.onended = () => {
+          $("audio-waveform").classList.add("hidden");
+        };
+
+        currentAudio.onerror = () => {
+          $("audio-waveform").classList.add("hidden");
+          handleVoiceFailure();
+        };
+
+        await currentAudio.play();
+
+      } catch (err) {
+        console.error("Voice synthesis failed:", err);
+        $("audio-waveform").classList.add("hidden");
+        handleVoiceFailure();
+      }
+    }
+
+    function handleVoiceFailure() {
+      showToast("Voice unavailable — pyttsx3 not working on this system");
+      isVoiceModeOn = false;
+      $("voice-toggle-btn").classList.remove("active");
+      $("voice-toggle-icon").textContent = "🔇";
+    }
+
+    // Voice Toggle Button Listener
+    $("voice-toggle-btn").addEventListener("click", () => {
+      isVoiceModeOn = !isVoiceModeOn;
+      const btn = $("voice-toggle-btn");
+      const icon = $("voice-toggle-icon");
+
+      if (isVoiceModeOn) {
+        btn.classList.add("active");
+        icon.textContent = "🔊";
+        showToast("ശരി ബ്രോ, ഇനി ഞാൻ സംസാരിക്കും. 🔊");
+        speakAYYO("ശരി ബ്രോ, ഇനി ഞാൻ സംസാരിക്കും.");
+      } else {
+        btn.classList.remove("active");
+        icon.textContent = "🔇";
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio = null;
+        }
+        $("audio-waveform").classList.add("hidden");
+        showToast("ഓക്കേ, silent mode. 🤫");
+      }
+    });
+
+    // Populate Available Voices in Voice Settings Modal
+    async function loadVoices() {
+      try {
+        const res = await fetch("/voices");
+        const data = await res.json();
+        const voices = data.voices || [];
+
+        const select = $("voice-select");
+        select.innerHTML = '<option value="">Default System Voice</option>';
+
+        let hasMalayalam = false;
+        voices.forEach(v => {
+          const opt = document.createElement("option");
+          opt.value = v.id;
+          opt.textContent = `${v.name}${v.is_malayalam ? ' 🌴 (Malayalam)' : ''}`;
+          if (v.is_malayalam) hasMalayalam = true;
+          select.appendChild(opt);
+        });
+
+        if (hasMalayalam) {
+          $("malayalam-voice-notice").classList.add("hidden");
+        } else {
+          $("malayalam-voice-notice").classList.remove("hidden");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Voice Settings Modal Listeners
+    $("voice-settings-btn").addEventListener("click", () => {
+      loadVoices();
+      $("voice-modal").classList.add("active");
+    });
+
+    $("voice-modal-close").addEventListener("click", () => {
+      $("voice-modal").classList.remove("active");
+    });
+
+    $("voice-modal-save").addEventListener("click", () => {
+      voiceConfig.rate = parseInt($("voice-rate-slider").value, 10) || 150;
+      voiceConfig.volume = parseInt($("voice-vol-slider").value, 10) || 100;
+      voiceConfig.voice = $("voice-select").value;
+      $("voice-modal").classList.remove("active");
+      showToast("Voice settings updated!");
+    });
+
+    $("voice-rate-slider").addEventListener("input", (e) => {
+      $("voice-rate-val").textContent = e.target.value;
+    });
+
+    $("voice-vol-slider").addEventListener("input", (e) => {
+      $("voice-vol-val").textContent = e.target.value + "%";
+    });
+
+    // Manual Execution / Mode Action Execution
+    async function runCode() {
+      const code = $("code").value.trim();
+      if (!code) {
+        showToast("Bro, write some Python code first!");
+        return;
+      }
+
+      if (activeFilterMode === "test-lab") {
+        fetchTestLab(code);
+        return;
+      }
+
+      const runBtn = $("run-btn");
+      const fabBtn = $("fab-run-btn");
+      const runText = $("run-btn-text");
+      const runIcon = $("run-btn-icon");
+
+      runBtn.disabled = true;
+      fabBtn.disabled = true;
+      runText.textContent = "Running...";
+      runIcon.innerHTML = `<path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>`;
+      runIcon.classList.add("spin");
+
+      const timeoutVal = parseInt($("timeout").value, 10) || 5;
+
+      try {
+        const res = await fetch("/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: $("code").value,
+            timeout: timeoutVal,
+          }),
+        });
+
+        const data = await res.json();
+
+        $("output-card").classList.remove("fade-in-reveal");
+        void $("output-card").offsetWidth;
+        $("output-card").classList.add("fade-in-reveal");
+
+        if (data.output && data.output.trim()) {
+          $("output-placeholder").classList.add("hidden");
+          $("stdout").classList.remove("hidden");
+          let out = data.output;
+          if (data.truncated) out += "\n... [output truncated]";
+          $("stdout").textContent = out;
+        } else {
+          $("stdout").classList.add("hidden");
+          $("output-placeholder").classList.remove("hidden");
+          $("output-placeholder").textContent = data.error ? "No stdout output produced." : "Code executed successfully with no stdout output.";
+        }
+
+        let spokenText = "";
+
+        if (data.error) {
+          const e = data.error;
+          $("error-section").classList.remove("hidden");
+
+          $("err-line-tag").textContent = e.line ? `LINE ${e.line}` : (e.type || "ERROR");
+          $("err-title").textContent = e.title || "Ayyo! Error Detected";
+
+          if (e.code) {
+            $("err-code-block").textContent = e.code;
+            $("err-code-block").classList.remove("hidden");
+          } else {
+            $("err-code-block").classList.add("hidden");
+          }
+
+          $("err-desc").textContent = e.desc || "എന്തോ വലിയ പ്രശ്നം സംഭവിച്ചു ബ്രോ.";
+          $("err-tip").textContent = e.tip ? "💡 " + e.tip : "";
+
+          const hintsList = $("err-hints-list");
+          hintsList.innerHTML = "";
+          if (e.hints && e.hints.length) {
+            $("err-hints-area").classList.remove("hidden");
+            e.hints.forEach(h => {
+              const div = document.createElement("pre");
+              div.className = "hint-item-pre";
+              div.textContent = h;
+              hintsList.appendChild(div);
+            });
+          } else {
+            $("err-hints-area").classList.add("hidden");
+          }
+
+          spokenText = `${e.title || ''}. ${e.desc || ''}. ${e.tip || ''}`;
+
+        } else {
+          $("error-section").classList.add("hidden");
+          spokenText = "Code run successful!";
+        }
+
+        if (isVoiceModeOn) {
+          speakAYYO(spokenText);
+        }
+
+      } catch (err) {
+        showToast("Server connection error");
+        console.error(err);
+      } finally {
+        runBtn.disabled = false;
+        fabBtn.disabled = false;
+        updateCtaLabels(activeFilterMode);
+        runIcon.classList.remove("spin");
+        runIcon.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+      }
+    }
+
+    // Event Listeners
+    $("run-btn").addEventListener("click", runCode);
+    $("fab-run-btn").addEventListener("click", runCode);
+
+    $("code").addEventListener("keydown", (ev) => {
+      if (ev.ctrlKey && ev.key === "Enter") {
+        ev.preventDefault();
+        runCode();
+      }
+    });
+
+    $("code").addEventListener("input", () => {
+      updateEditorStats();
+      debouncedLiveCheck();
+    });
+
+    $("code").addEventListener("scroll", () => {
+      $("line-numbers").scrollTop = $("code").scrollTop;
+    });
+
+    $("nav-clear-btn").addEventListener("click", () => {
+      $("code").value = "";
+      updateEditorStats();
+      runAllFeatures();
+      $("stdout").textContent = "";
+      $("stdout").classList.add("hidden");
+      $("output-placeholder").classList.remove("hidden");
+      $("output-placeholder").textContent = 'Click "Run code" to view stdout output...';
+      $("error-section").classList.add("hidden");
+      showToast("Code editor cleared!");
+    });
+
+    $("nav-top-btn").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    $("nav-copy-btn").addEventListener("click", () => {
+      let textToCopy = $("code").value;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast("Code copied to clipboard!");
+      }).catch(() => {
+        showToast("Copy failed");
+      });
+    });
+
+    $("nav-info-btn").addEventListener("click", () => {
+      $("info-modal").classList.add("active");
+    });
+
+    $("modal-close").addEventListener("click", () => {
+      $("info-modal").classList.remove("active");
+    });
+
+    $("modal-ok-btn").addEventListener("click", () => {
+      $("info-modal").classList.remove("active");
+    });
+
+    $("info-modal").addEventListener("click", (e) => {
+      if (e.target === $("info-modal")) {
+        $("info-modal").classList.remove("active");
+      }
+    });
+
+    // Initialization
+    window.addEventListener("DOMContentLoaded", () => {
+      // Check if arriving from Library "Try it" button
+      const tryCode = sessionStorage.getItem("ayyo_try_code");
+      if (tryCode) {
+        $("code").value = tryCode;
+        sessionStorage.removeItem("ayyo_try_code");
+        showToast("Loaded snippet from Emoji Library! 🚀");
+      } else if (!$("code").value) {
+        $("code").value = "x = 42\ny = 0\nprint('Calculating x / y...')\nprint(x / y)";
+      }
+
+      updateEditorStats();
+      loadEmojiPalette();
+      runAllFeatures();
+    });
+  </script>
+</body>
+
+</html>
