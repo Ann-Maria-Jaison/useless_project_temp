@@ -88,9 +88,9 @@ graph TD
     end
 
     %% Connections
-    UI -->|HTTP / JSON| WSGI
-    LibraryUI -->|HTTP / JSON| WSGI
-    CLI -->|Direct Imports| Engine_Layer
+    UI -->|"HTTP / JSON"| WSGI
+    LibraryUI -->|"HTTP / JSON"| WSGI
+    CLI -->|"Direct Imports"| Engine_Layer
 
     WSGI --> Flask
     Flask --> BP_Run
@@ -109,8 +109,8 @@ graph TD
     TestLab --> Runner
     BP_Run --> Runner
 
-    Runner -->|Executes Code with Timeout| PyExec
-    VoiceEngine -->|Renders WAV Audio| TTS
+    Runner -->|"Executes Code with Timeout"| PyExec
+    VoiceEngine -->|"Renders WAV Audio"| TTS
 ```
 
 ---
@@ -128,12 +128,12 @@ graph LR
         SystemProcess["AYYO Code Companion Engine"]
     end
 
-    User -->|1. Submit Python Code / Execution Request| SystemProcess
-    User -->|2. Select Mode (Diagnose, Explain, Test, Clean)| SystemProcess
+    User -->|"1. Submit Python Code / Execution Request"| SystemProcess
+    User -->|"2. Select Mode (Diagnose, Explain, Test, Clean)"| SystemProcess
     
-    SystemProcess -->|3. Return Execution Output & Error Diagnostics| User
-    SystemProcess -->|4. Return AST Analysis & Code Personality| User
-    SystemProcess -->|5. Stream Voice Audio Feedback (WAV)| User
+    SystemProcess -->|"3. Return Execution Output & Error Diagnostics"| User
+    SystemProcess -->|"4. Return AST Analysis & Code Personality"| User
+    SystemProcess -->|"5. Stream Voice Audio Feedback (WAV)"| User
 ```
 
 ---
@@ -158,22 +158,22 @@ graph TD
     D2[("Error & Hints Library")]
 
     %% Flow Connections
-    User -->|Raw Code & Config| P1
-    P1 -->|Validated Code String| P2
-    P1 -->|Validated Code String| P3
+    User -->|"Raw Code & Config"| P1
+    P1 -->|"Validated Code String"| P2
+    P1 -->|"Validated Code String"| P3
     
-    P3 -->|Execution Result / Stdout / Stderr| P4
-    P2 -->|AST Structure & Tokens| P4
-    P2 -->|AST Structure & Tokens| P5
+    P3 -->|"Execution Result / Stdout / Stderr"| P4
+    P2 -->|"AST Structure & Tokens"| P4
+    P2 -->|"AST Structure & Tokens"| P5
     
-    D2 -->|Error Patterns & Tips| P4
-    D1 -->|Snippet Templates| P1
+    D2 -->|"Error Patterns & Tips"| P4
+    D1 -->|"Snippet Templates"| P1
 
-    P4 -->|Formatted Diagnostics & Manglish Verdict| User
-    P5 -->|Personality Scorecard & Test Results| User
+    P4 -->|"Formatted Diagnostics & Manglish Verdict"| User
+    P5 -->|"Personality Scorecard & Test Results"| User
 
-    P4 -->|Text to Speak| P6
-    P6 -->|WAV Audio Stream| User
+    P4 -->|"Text to Speak"| P6
+    P6 -->|"WAV Audio Stream"| User
 ```
 
 ---
@@ -193,7 +193,7 @@ sequenceDiagram
     participant Voice as core/voice.py
 
     User->>Route: POST /run (code, timeout)
-    Route->>Route: Validate payload size (< 20 KB) & clamp timeout (1-10s)
+    Route->>Route: Validate payload size under 20KB and clamp timeout 1-10s
     
     Route->>Runner: run_code(code, timeout)
     Runner->>Subprocess: Popen(["python", "-c", code])
